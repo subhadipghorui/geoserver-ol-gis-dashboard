@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" id="input" />
+    <button id="btn">upload</button>
+    <script>
+      const inputElement = document.getElementById("input");
+      const btn =document.getElementById("btn");
+      inputElement.addEventListener("click", handleFiles, false);
+      function handleFiles() {
+        const file = this.files[0]; /* now you can work with the file list */
+        // const file = inputElement.value;
+        console.log(file);
+
+        // 
+        if(file){
+            const reader = new FileReader();
+            // console.log(reader);
+            reader.addEventListener('load', function(){
+                let result =this.result;
+                console.log(result);
+            });
+            reader.readAsDataURL(file);
+        } 
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Navbar */
+@media only screen and (min-width: 990px) {
+  .end-menu {
+    /* border: 1px solid #333; */
+    margin-left: -6rem;
+  }
+}
+.main-content {
+  position: relative;
+  height: 93vh;
+}
+.map {
+  /* height: 600px; */
+  height: 100%;
+  width: 100%;
+}
+
+/* Layers panel */
+
+.layers-panel-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 350px;
+  max-width: 600px;
+  height: 73vh;
+  margin-top: 40px;
+  background: #fff;
+  overflow: hidden;
+  overflow-y: scroll;
+  animation: fadeIn ease-in-out 0.3s;
+  box-shadow: -10px 5px 18px rgba(51, 51, 51, 0.483);
+  /* display: none; */
+}
+.layers-panel{
+  padding: 10px 15px;
+}
+.layers-panel-header{
+  width: 100%;
+  height: 50px;
+  background: rgb(10, 53, 109);
+  color: #fff;
+  padding: 5px 0;
+}
+@media only screen and (max-width: 768px) {
+  .layers-panel-wrapper{
+    height: 90vh;
+    margin-top: 80px;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.layer-switcher {
+  top: 70px;
+  left: 0.5em;
+}
+/* On Mobile */
+.ol-touch .layer-switcher {
+  top: 80px;
+}
+
+.geolocate {
+  top: 100px;
+  left: 0.5em;
+}
+/* On mobile */
+.ol-touch .geolocate {
+  top: 120px;
+}

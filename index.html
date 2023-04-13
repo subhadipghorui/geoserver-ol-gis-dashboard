@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIS Dashboard</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
+
+  <!-- Fonawasome -->
+  <script src="https://kit.fontawesome.com/6e54032103.js" crossorigin="anonymous"></script>
+  <!-- CSS -->
+  <link rel="stylesheet" href="./lib/bootstarp/bootstrap v4.5.3.min.css">
+  <link rel="stylesheet" href="./lib/openlayer 6/ol.css">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="box-shadow: 10px 1px 18px #333;">
+    <div class="container">
+      <a class="navbar-brand d-flex" href="#">
+        <img src="https://image.flaticon.com/icons/png/512/183/183373.png" alt="logo" width="30px" height="auto">
+        <span class="ml-2">GIS Dashboard</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#" id="layers-panel-switch">Layers Panel</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Add Layers
+            </a>
+            <div class="dropdown-menu border-0" aria-labelledby="navbarDropdown"
+              style="box-shadow: 10px 1px 20px rgba(51, 51, 51, 0.483);">
+              <!-- <a class="dropdown-item" href="#">Geoserver</a> -->
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#wmsImageModal">WMS Image</a>
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#wmsTileModal">WMS Tile</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- ./Navbar -->
+  <div class="main-content" id="fullscreen">
+    <!-- Main Map -->
+    <div id="map" class="map"></div>
+    <!-- ./Main Map -->
+    <div id="layer-info"></div>
+    <!-- Layers Panel -->
+    <div id="layers-panel" class="layers-panel-wrapper">
+      <div class="layers-panel-header px-2 d-flex justify-content-between">
+        <p class="nav-link">Layers Panel</p>
+        <a href="#" onclick="$('#layers-panel').hide();" class="nav-link"><i class="fas fa-times mr-2 text-light"></i></a>
+      </div>
+      <div class="layers-panel">
+        <div class="layers-panel-title d-flex justify-content-between">
+          <ul class="nav mt-1 justify-content-end">
+            <li class="nav-item">
+              <a class="nav-link btn btn-outline-success mr-2" href="#" aria-hidden="true" data-toggle="modal" data-target="#layerUploadModal"><i class="fa fa-arrow-circle-o-up mr-2"></i>Upload</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link btn btn-outline-info dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Add Layers
+              </a>
+              <div class="dropdown-menu border-0" aria-labelledby="navbarDropdown"
+                style="box-shadow: 10px 1px 20px rgba(51, 51, 51, 0.483);">
+                <!-- <a class="dropdown-item" href="#">Geoserver</a> -->
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#wmsImageModal">WMS Image</a>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#wmsTileModal">WMS Tile</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="layers-panel-title">
+          <h5 class="my-3 mx-2">Base Layers</h5>
+        </div>
+        <div class="px-2">
+          <div class="form-group">
+            <select class="form-control" id="baselayer">
+              <option>OSM Standard</option>
+              <option>Esri Satelite</option>
+              <option>OSM Humanitarian</option>
+              <option>Bing Maps</option>
+              <option>Carto Dark All</option>
+              <option>Stamen Terrain With Labels</option>
+              <option>Stamen Terrain</option>
+              <option>Vector Tile Layer OSM</option>
+            </select>
+          </div>
+        </div>
+        <div class="layers-panel-title">
+          <h5 class="my-3 mx-2">Layers</h5>
+        </div>
+        <ul id="layerList" class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between" aria-disabled="true">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+              <label class="form-check-label" for="inlineCheckbox1">
+                Burdwan Ward Poly
+              </label>
+            </div>
+            <div class="px-1 d-flex">
+              <i class="fas fa-arrow-up px-2 my-auto"></i>
+              <i class="fas fa-arrow-down px-2 my-auto"></i>
+              <div class="dropdown my-auto">
+                <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Action
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Zoom to Layer</a>
+                  <a class="dropdown-item" href="#">Remove</a>
+                  <!-- <a class="dropdown-item" href="#">Opacity</a> -->
+                  <div class="dropdown-item">
+                    <div class="form-group">
+                      <label for="formControlRange">Opacity</label>
+                      <input type="range" class="form-control-range" id="formControlRange">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- ./Layers Panel -->
+
+    <!-- Add WMS Image Layer -->
+    <div class="modal fade" id="wmsImageModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">WMS Image</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="wmsImageLayerTitle">Layer Title</label>
+                <input type="text" class="form-control" id="wmsImageLayerTitle" placeholder="Maharastra LULC"
+                  value="Maharastra LULC">
+              </div>
+              <div class="form-group">
+                <label for="wmsImageUrl">WMS Image URL</label>
+                <input type="text" class="form-control" id="wmsImageUrl"
+                  placeholder="https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms"
+                  value="https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms">
+              </div>
+              <div class="form-group">
+                <label for="wmsImageLayerName">Image Layer Name</label>
+                <input type="text" class="form-control" id="wmsImageLayerName" placeholder="lulc:WB_LULC50K_0506"
+                  value="lulc:MH_LULC50K_0506">
+              </div>
+              <div class="form-group">
+                <label for="wmsTileLayerName">Layer Extent</label>
+                <input type="text" class="form-control" id="wmsImageLayerExtent" placeholder=""
+                  value="72.643,15.606,80.898,22.027">
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="wmsImageLayerVisibility" checked>
+                <label class="form-check-label" for="wmsImageLayerVisibility">Layer Visibility</label>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="getWMSImageLayerBtn">Get Layer</button>
+          </div>
+        </div>
+      </div>
+    </div <!-- ./Add WMS Image Layer -->
+    <!-- Add WMS Tile Layer -->
+    <div class="modal fade" id="wmsTileModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Add WMS Tile Layer</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="wmsTileLayerTitle">Layer Title</label>
+                <input type="text" class="form-control" id="wmsTileLayerTitle" placeholder="Maharastra LULC"
+                  value="Maharastra LULC">
+              </div>
+              <div class="form-group">
+                <label for="wmsTileUrl">WMS Tile URL</label>
+                <input type="text" class="form-control" id="wmsTileUrl"
+                  placeholder="https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms"
+                  value="https://bhuvan-vec2.nrsc.gov.in/bhuvan/wms">
+              </div>
+              <div class="form-group">
+                <label for="wmsTileLayerName">Tile Layer Name</label>
+                <input type="text" class="form-control" id="wmsTileLayerName" placeholder="lulc:WB_LULC50K_0506"
+                  value="lulc:MH_LULC50K_0506">
+              </div>
+              <div class="form-group">
+                <label for="wmsTileLayerName">Layer Extent</label>
+                <input type="text" class="form-control" id="wmsTileLayerExtent" placeholder=""
+                  value="72.643,15.606,80.898,22.027">
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="wmsTileLayerVisibility" checked>
+                <label class="form-check-label" for="wmsTileLayerVisibility">Layer Visibility</label>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="getWMSTileLayerBtn">Get Layer</button>
+          </div>
+        </div>
+      </div>
+    </div <!-- ./Add WMS Tile Layer -->
+    <!-- Upload FILE -->
+    <div class="modal fade" id="layerUploadModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Upload Layer</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="layerUploadModalType">Format</label>
+              <select class="form-control" id="layerUploadModalType">
+                <option>GeoJSON</option>
+                <option>KML</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="layerUploadModalTitle">Layer Title</label>
+              <input type="text" class="form-control" id="layerUploadModalTitle" placeholder="Maharastra LULC"
+                value="Maharastra LULC">
+            </div>
+            <div class="form-group" style="user-select: auto;">
+              <label for="uploadedFile">File</label>
+                <input type="file" class="form-control-file" id="uploadedFile">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="layerUploadModalBtn">Get Layer</button>
+        </div>
+      </div>
+    </div>
+  </div  <!-- ./Upload FILE -->
+  </div>
+  <!-- JS -->
+  <script src="./lib/bootstarp/jquery-3.5.1.slim.min.js"></script>
+  <script src="./lib/bootstarp/bootstrap v4.5.3.bundle.min.js"></script>
+  <script src="./lib/openlayer 6/ol.js"></script>
+  <script src="./src/map.js"></script>
+  <script src="./src/dashboard.js"></script>
+  <script src="./src/main.js"></script>
+</body>
+
+</html>
